@@ -14,6 +14,9 @@
 ;; Liquidation threshold (130%)
 (define-constant LIQUIDATION_THRESHOLD u130)
 
+;; Maximum uint value (for infinity representation)
+(define-constant MAX_UINT u340282366920938463463374607431768211455)
+
 ;; Data maps for vault management
 (define-map vaults
   { owner: principal }
@@ -133,7 +136,7 @@
 (define-private (calculate-collateral-ratio (collateral-amount uint) (debt-amount uint))
   (if (is-eq debt-amount u0)
     ;; If no debt, return max uint (infinite ratio)
-    (/ (unwrap-panic (pow-precision u2 u32 u0)) u1)
+    MAX_UINT
     ;; Otherwise calculate actual ratio
     (/ (* collateral-amount u100) debt-amount)
   )
